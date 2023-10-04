@@ -1,0 +1,174 @@
+1. In Heap, the parent, left, and right (index) of index is
+   parent(index), left(index), and right(index).
+   isRoot(index) is true if index is the root (index==0).
+   The element at index is less than its parent if
+	compare(index, parent(index)) < 0   
+   To swap the element at index with its parent:
+	index = swap(index, parent(index))
+
+   offer() adds a new element to the end and sets index to the index
+   of the new element (size()-1).
+
+   Add a loop:
+     while (the element at) index is less than its parent,
+        swap it with its parent.
+
+   Test output is heap-offer.txt.
+
+
+2. isValid(index) is true if 0<=index<size(). The element at
+   index has a left child if isValid(left(index)) is true.
+   index has a right child if isValid(right(index)) is true.
+
+   Add a loop to poll():
+   while (the element at) index is greater than its left or right child,
+      swap it with its smallest child.
+
+   Use compare and swap as in #1 except left(index) and/or
+   right(index) instead of parent(index).
+
+   Keep in mind that it may not have either or it may have a left
+   child but not a right child.  If it has only one child, then that's
+   its smallest child.  Otherwise you have to compare them.
+
+   Test output is heap-poll.txt.
+
+
+3. BST (Binary Search Tree) is an implementation of Map.  The Entry
+   class has key, value, left, and right.  In a binary search tree,
+   left is less and right is greater (keys).
+
+   Implement the (private) BST find method using the notes.  Methods
+   in BST should use RECURSION not iteration.  Implement get.  (Look
+   at containsKey.)  Your get should not call containsKey and should
+   have only one call to find.  (What does find return if the key is
+   not there?)
+
+
+4. Implement the private add method using the notes.  Remember, you
+   must put the value returned by the recursive call to add() in the
+   right place (or left place :-).
+
+   Now, implement the public put method using add.  What do you do
+   with the value add returns?
+
+   Test the program.  The output should be as in bst-put.txt.
+
+   Copy prog06/Jumble.java to prog07 and change the package at the top
+   to prog07 (if this does not happen automatically).  Switch it to
+   using BST.  Comment out the test of map.remove.  Does it work with
+   words.txt?  How fast can it load dict.txt?  How does it compare to
+   SkipMap?
+
+
+HOMEWORK
+
+5. Implement the public BST remove method using find and the private
+   remove method.
+
+   Implement the private remove method based on the notes.  It will
+   call removeRoot.
+
+
+   Implement removeRoot and the other methods it needs.  The correct
+   output in in bst-remove.txt.
+
+
+6. Copy your NotWordle.java from prog05 to prog07 and change the
+   package of the copy to prog07 at the top.
+
+
+7. Add code to solve so it displays a message about how many times it
+   polls the queue.  (Poll is expensive because you have the check the
+   entire dictionary for neighbors.)  You should get 481 for "snow" to
+   "rain".
+
+
+8. Add a static method numDifferent that tells you the number of
+    letters that are different in two words.  For example,
+
+	numDifferent("snow", "slot") == 2
+
+    Test it.
+
+
+9. Add a method
+
+	static int numSteps (int[] parentIndices, int index)
+
+   that takes the parentIndices array and an index as input and returns the
+   number of steps back to the start word index (which will have -1).
+
+   For example, if parentIndices is
+
+	[0[ [1] [2] [3] [4] [5] [6] [7]
+	-1  -1   1   2   1   4   5   4
+
+   then numSteps(parentIndices, 6) returns 4 because
+
+	parentIndices[6] == 5
+	parentIndices[5] == 4
+	parentIndices[4] == 1
+	parentIndices[1] == -1
+
+   so it takes 3 steps, 5, 4, 1, to get to a -1.
+
+   Add a message to solve that tells you how far the target is from
+   the start (when you have found the path).
+
+
+12. Add a class IndexComparator (INSIDE the NotWordle class!) that
+    implements Comparator<Integer>.
+
+    a. Its constructor IndexComparator(parentIndices, target) should take
+       the parentIndices array and the target word as arguments and store
+       them inside IndexComparator.
+
+    b. The method priority(index) returns the number of steps from
+       the index to the start index PLUS the number of differences
+       between the word at that index and the target word.
+
+    c. The method public int compare(index1, index2) (required by the
+       Comparator interface) should return < 0 if sumNums(index1) is
+       smaller than sumNums(index2), = 0 if they have the same value,
+       and > 0 otherwise.
+
+
+13. In solve, switch to using a PriorityQueue<Integer> for the Queue.
+    The priority queue should use a IndexComparator for comparisons.
+    How many words does it dequeue now?  (Should be 117.)
+
+
+14. Now switch to using your Heap using your Comparator.  It should
+    run the same.  Switch back to PriorityQueue for the next part.
+
+
+13. Unfortunately, you will also notice that the solution for "snow"
+    to "rain" is LONGER than before.  Here is how to fix this.
+
+     When NotWordle solve dequeues the current word index and looks at
+     all elements of the dictionary for neighbors, instead of just
+     words with parentIndices[index] == -1, it it should also consider
+     words that have
+
+numSteps(parentIndices, parentIndex) + 1 < numSteps(parentIndices, index)
+
+    If parentIndices[index] != -1, it should remove it from the queue
+    before adding it to the queue.  (Yes, REMOVE IT and then add it as
+    usual.)
+
+    solve() should now find the same length solution for snow to rain
+    but dequeue far fewer words than the prog06 solve().  (Should be 74.)
+
+
+14. Implement remove in Heap.  Correct output in heap-remove.txt.
+    Switch back to Heap in solve and make sure it still works right.
+
+
+
+
+
+
+
+
+
